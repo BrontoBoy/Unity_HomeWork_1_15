@@ -7,10 +7,8 @@ namespace Cainos.PixelArtPlatformer_VillageProps
 {
     public class Chest : MonoBehaviour
     {
-        [FoldoutGroup("Reference")]
         public Animator animator;
-
-        [FoldoutGroup("Runtime"), ShowInInspector, DisableInEditMode]
+        
         public bool IsOpened
         {
             get { return isOpened; }

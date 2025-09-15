@@ -1,48 +1,42 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Animator))]
-[RequireComponent(typeof(SpriteRenderer))]
+[RequireComponent(typeof(InputReader))]
+[RequireComponent(typeof(Mover))]
+[RequireComponent(typeof(AnimatorHandler))]
+[RequireComponent(typeof(SpriteRotator))]
 public class Player : MonoBehaviour
 {
-    private const string Horizontal = nameof(Horizontal);
-    private const string Jump = nameof(Jump);
-    
-    [SerializeField] private float _moveSpeed =  5f;
-    [SerializeField] private float _jumpForce = 6.5f;
+    [SerializeField] private GroundDetector _groundDetector;
+    private InputReader _inputReader;
+    private Mover _mover;
+    private AnimatorHandler _animatorHandler;
+    private SpriteRotator _spriteRotator;
 
-    private Animator _animator;
-    private SpriteRenderer _spriteRenderer;
-    private bool _isMoving;
-
-    private void Start()
+    private void Awake()
     {
-        _animator = GetComponent<Animator>();
-        _spriteRenderer = GetComponent<SpriteRenderer>();
-    }
-    private void Update()
-    {
-        Move();
+        _inputReader = GetComponent<InputReader>();
+        _mover = GetComponent<Mover>();
+        _animatorHandler = GetComponent<AnimatorHandler>();
+        _spriteRotator = GetComponent<SpriteRotator>();
     }
     
-    private void Move()
+    private void FixedUpdate()
     {
-        string animatorIsMove = "isMove";
-        float direction = Input.GetAxis(Horizontal);
-        float movement = direction * _moveSpeed * Time.deltaTime;
-        float jump = Input.GetAxis(Jump);
-        float jumpForce = jump * _jumpForce * Time.deltaTime;
-        transform.Translate(movement * Vector2.right);
-        transform.Translate(jumpForce * Vector2.up);
-        _isMoving = Mathf.Abs(direction) > 0.1f;
-        _animator.SetBool(animatorIsMove, _isMoving);
-        
-        if (direction < 0)
+        bool isRunning = _inputReader.Direction != 0;
+
+        if (isRunning)
         {
-            _spriteRenderer.flipX = true;
+            _mover.Move(_inputReader.Direction);
+            _spriteRotator.Rotate(_inputReader.Direction);
+            
         }
-        else if (direction > 0)
+        
+        _animatorHandler.PlayRunAnimation(isRunning); 
+
+        if (_inputReader.GetIsJump() && _groundDetector.IsGround)
         {
-            _spriteRenderer.flipX = false;
+            _mover.Jump();
+            _animatorHandler.PlayJumpAnimation();
         }
     }
 }
