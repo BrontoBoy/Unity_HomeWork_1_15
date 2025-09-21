@@ -10,11 +10,16 @@ public class AnimatorHandler : MonoBehaviour
         _animator = GetComponent<Animator>();
     }
 
-    public void PlayRunAnimation(bool isRunning)
+    public void ActivateRunAnimation()
     {
-        _animator.SetBool(PlayerAnimatorData.Params.IsRunning, isRunning);
+        _animator.SetBool(PlayerAnimatorData.Params.IsRunning, true);
     }
 
+    public void DeactivateRunAnimation()
+    {
+        _animator.SetBool(PlayerAnimatorData.Params.IsRunning, false);
+    }
+    
     public void PlayJumpAnimation()
     {
         _animator.SetTrigger(PlayerAnimatorData.Params.Jump);

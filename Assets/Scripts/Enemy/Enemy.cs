@@ -1,37 +1,31 @@
 using UnityEngine;
 
+[RequireComponent(typeof(EnemyMover))]
+[RequireComponent(typeof(EnemyPatrol))]
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] private Transform[] _waypoints;
-    [SerializeField] private float _speed = 3f;
-    [SerializeField] private float _reachThreshold = 0.1f;
+    [SerializeField] private EnemyMover _enemyMover;
+    [SerializeField] private EnemyPatrol _enemyPatrol;
     
-    private int _currentWaypointIndex = 0;
     private void Start()
     {
-        if (_waypoints == null || _waypoints.Length == 0)
-        {
-            enabled = false;
-        }
-        
-        _reachThreshold *= _reachThreshold;
+        _enemyMover = GetComponent<EnemyMover>();
+        _enemyPatrol = GetComponent<EnemyPatrol>();
     }
     
     private void Update()
     {
-        MoveToWaypoint();
+        Patrol();
     }
-    
-    private void MoveToWaypoint()
+
+    private void Patrol()
     {
-        Transform currentWaypoint = _waypoints[_currentWaypointIndex];
-        transform.position = Vector2.MoveTowards(transform.position, currentWaypoint.position, _speed * Time.deltaTime);
-        Vector3 offset = transform.position - currentWaypoint.position;
-        float distance = offset.sqrMagnitude;
-        
-        if (distance <= _reachThreshold)
+        Transform targetWaypoint = _enemyPatrol.CurrentWaypoint;
+        _enemyMover.Move(targetWaypoint);
+    
+        if (_enemyMover.Distance <= _enemyPatrol.ReachThreshold)
         {
-            _currentWaypointIndex = ++_currentWaypointIndex % _waypoints.Length;
+            _enemyPatrol.SelectNextWaypoint();
         }
     }
 }

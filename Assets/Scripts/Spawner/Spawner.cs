@@ -5,7 +5,8 @@ public class Spawner : MonoBehaviour
 {
     private const float SpawnDelay = 2f;
     
-    [SerializeField] private SpawnPoint[] _spawnPoints;
+    [SerializeField] private Coin _coinPrefab;
+    [SerializeField] private Transform[] _spawnPoints;
     
     private bool _isSpawningActive = false;
     private WaitForSeconds _spawnWait;
@@ -50,7 +51,13 @@ public class Spawner : MonoBehaviour
     private void SpawnSingleCoin()
     {
         int randomIndex = Random.Range(0, _spawnPoints.Length);
-        SpawnPoint chosenSpawnPoint = _spawnPoints[randomIndex];
-        Coin coin = chosenSpawnPoint.Spawn();
+        Coin coin = Instantiate(_coinPrefab, _spawnPoints[randomIndex].position, Quaternion.identity);
+        coin.Collect += OnCoinCollect;
+    }
+    
+    private void OnCoinCollect(Coin coin)
+    {
+        coin.Collect -= OnCoinCollect;
+        Destroy(coin.gameObject);
     }
 }

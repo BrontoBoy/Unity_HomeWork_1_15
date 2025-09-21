@@ -1,13 +1,13 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))]
-public class CoinCollector : MonoBehaviour
+public class Collector : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.TryGetComponent<Coin>(out Coin coin))
+        if (other.TryGetComponent(out Coin coin))
         {
-            Destroy(coin.gameObject);
+            coin.Collect?.Invoke(coin);
         }
     }
 }

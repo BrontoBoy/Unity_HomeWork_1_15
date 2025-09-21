@@ -7,10 +7,13 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField] private GroundDetector _groundDetector;
+    
     private InputReader _inputReader;
     private Mover _mover;
     private AnimatorHandler _animatorHandler;
     private SpriteRotator _spriteRotator;
+
+    private bool _wasRunning = false;
 
     private void Awake()
     {
@@ -19,19 +22,27 @@ public class Player : MonoBehaviour
         _animatorHandler = GetComponent<AnimatorHandler>();
         _spriteRotator = GetComponent<SpriteRotator>();
     }
-    
+
     private void FixedUpdate()
     {
         bool isRunning = _inputReader.Direction != 0;
+
+        if (isRunning && !_wasRunning)
+        {
+            _animatorHandler.ActivateRunAnimation();
+            _wasRunning = true;
+        }
+        else if (!isRunning && _wasRunning)
+        {
+            _animatorHandler.DeactivateRunAnimation();
+            _wasRunning = false;
+        }
 
         if (isRunning)
         {
             _mover.Move(_inputReader.Direction);
             _spriteRotator.Rotate(_inputReader.Direction);
-            
         }
-        
-        _animatorHandler.PlayRunAnimation(isRunning); 
 
         if (_inputReader.GetIsJump() && _groundDetector.IsGround)
         {
