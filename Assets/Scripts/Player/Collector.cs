@@ -7,7 +7,7 @@ public class Collector : MonoBehaviour
     {
         if (other.TryGetComponent(out Coin coin))
         {
-            coin.Collect?.Invoke(coin);
+            coin.Collected?.Invoke(coin);
         }
     }
 }

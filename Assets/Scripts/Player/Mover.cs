@@ -8,6 +8,8 @@ public class Mover : MonoBehaviour
     
     private Rigidbody2D _rigidbody;
 
+    public Vector2 Velocity => _rigidbody.linearVelocity;
+    
     private void Start()
     {
         _rigidbody = GetComponent<Rigidbody2D>();

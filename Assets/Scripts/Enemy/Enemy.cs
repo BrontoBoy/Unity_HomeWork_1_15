@@ -1,31 +1,21 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
-[RequireComponent(typeof(EnemyMover))]
+[RequireComponent(typeof(Mover))]
 [RequireComponent(typeof(EnemyPatrol))]
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] private EnemyMover _enemyMover;
-    [SerializeField] private EnemyPatrol _enemyPatrol;
+    [SerializeField] private Mover _mover;
+    [SerializeField] private EnemyPatrol _patrol;
     
     private void Start()
     {
-        _enemyMover = GetComponent<EnemyMover>();
-        _enemyPatrol = GetComponent<EnemyPatrol>();
+        _mover = GetComponent<Mover>();
+        _patrol = GetComponent<EnemyPatrol>();
     }
     
     private void Update()
     {
-        Patrol();
-    }
-
-    private void Patrol()
-    {
-        Transform targetWaypoint = _enemyPatrol.CurrentWaypoint;
-        _enemyMover.Move(targetWaypoint);
-    
-        if (_enemyMover.Distance <= _enemyPatrol.ReachThreshold)
-        {
-            _enemyPatrol.SelectNextWaypoint();
-        }
+        _patrol.Patrol(_mover);
     }
 }

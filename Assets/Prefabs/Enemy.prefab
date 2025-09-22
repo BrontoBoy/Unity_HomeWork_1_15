@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: -3634973631630317405}
   - component: {fileID: 6394899599234900328}
   - component: {fileID: 4677447382056260522}
+  - component: {fileID: 2613287783415379011}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -33,7 +34,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -2.95, y: -2.56, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 0.45, y: 0.45, z: 0.45}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -167,8 +168,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c0aaa976338732469d0ea902afa78b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemyMover: {fileID: 6394899599234900328}
-  _enemyPatrol: {fileID: 4677447382056260522}
+  _mover: {fileID: 2613287783415379011}
+  _patrol: {fileID: 4677447382056260522}
 --- !u!114 &6394899599234900328
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -195,4 +196,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _waypoints: []
-  _reachThreshold: 0.1
+  _reachThreshold: 0.2
+  _stuckThreshold: 2
+--- !u!114 &2613287783415379011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 544976911381702368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d191c7866b4234c4ebf52a6011d30e97, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _speedX: 4
+  _jumpForce: 6.5

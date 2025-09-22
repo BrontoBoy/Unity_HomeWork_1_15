@@ -1,12 +1,12 @@
 using UnityEngine;
 using System.Collections;
 
-public class Spawner : MonoBehaviour
+public class CoinSpawner : MonoBehaviour
 {
     private const float SpawnDelay = 2f;
     
-    [SerializeField] private Coin _coinPrefab;
     [SerializeField] private Transform[] _spawnPoints;
+    [SerializeField] private CoinPool _coinPool;
     
     private bool _isSpawningActive = false;
     private WaitForSeconds _spawnWait;
@@ -50,14 +50,20 @@ public class Spawner : MonoBehaviour
 
     private void SpawnSingleCoin()
     {
+        if (_coinPool == null)
+        {
+            return;
+        }
+        
         int randomIndex = Random.Range(0, _spawnPoints.Length);
-        Coin coin = Instantiate(_coinPrefab, _spawnPoints[randomIndex].position, Quaternion.identity);
-        coin.Collect += OnCoinCollect;
+        Coin coin = _coinPool.GetCoin();
+        coin.transform.position = _spawnPoints[randomIndex].position;
+        coin.Collected += OnCoinCollected;
     }
     
-    private void OnCoinCollect(Coin coin)
+    private void OnCoinCollected(Coin coin)
     {
-        coin.Collect -= OnCoinCollect;
-        Destroy(coin.gameObject);
+        coin.Collected -= OnCoinCollected;
+        _coinPool.ReturnCoin(coin);
     }
 }

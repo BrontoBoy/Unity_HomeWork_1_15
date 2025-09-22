@@ -3,21 +3,10 @@ using UnityEngine;
 [RequireComponent(typeof(Collider2D))]
 public class Coin : MonoBehaviour
 {
-    public System.Action<Coin> Collect;
+    public System.Action<Coin> Collected;
     
-    private void Awake()
+    public void Collect()
     {
-        Collect += OnCollect;
-    }
-    
-    private void OnCollect(Coin coin)
-    {
-        Collect -= OnCollect;
-        Destroy(gameObject);
-    }
-    
-    private void OnDestroy()
-    {
-        Collect -= OnCollect;
+        Collected?.Invoke(this);
     }
 }

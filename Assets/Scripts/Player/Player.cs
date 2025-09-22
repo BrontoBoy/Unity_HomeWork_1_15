@@ -25,29 +25,30 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-        bool isRunning = _inputReader.Direction != 0;
+        float direction = _inputReader.Direction;
+        bool isRunning = direction != 0;
 
         if (isRunning && !_wasRunning)
         {
-            _animatorHandler.ActivateRunAnimation();
+            _animatorHandler.PlayRun();
             _wasRunning = true;
         }
         else if (!isRunning && _wasRunning)
         {
-            _animatorHandler.DeactivateRunAnimation();
+            _animatorHandler.StopRun();
             _wasRunning = false;
         }
 
         if (isRunning)
         {
             _mover.Move(_inputReader.Direction);
-            _spriteRotator.Rotate(_inputReader.Direction);
+            _spriteRotator.TryRotateTowards(direction); 
         }
 
         if (_inputReader.GetIsJump() && _groundDetector.IsGround)
         {
             _mover.Jump();
-            _animatorHandler.PlayJumpAnimation();
+            _animatorHandler.PlayJump();
         }
     }
 }
