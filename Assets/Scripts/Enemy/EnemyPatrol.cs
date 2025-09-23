@@ -2,30 +2,43 @@ using UnityEngine;
 
 public class EnemyPatrol : MonoBehaviour
 {
-    [SerializeField] private Transform[] _waypoints;
+    private const float MinMoveDistance = 0.01f;
+    
     [SerializeField] private float _reachThreshold = 0.1f;
     [SerializeField] private float _stuckThreshold = 2f; 
+    [SerializeField] private Transform[] _waypoints;
     
     private int _currentWaypointIndex = 0;
-    private Vector3 _lastPosition;
     private float _stuckTimer = 0f;
+    private Vector3 _lastPosition;
+    private Mover _mover;
     
     public Transform CurrentWaypoint => _waypoints[_currentWaypointIndex];
     
-    private void Start()
+    private void Awake() 
     {
+        _lastPosition = transform.position;
+        _mover = GetComponent<Mover>();
+        
         if (_waypoints == null || _waypoints.Length == 0)
         {
             enabled = false;
+            
+            return;
+        }
+    }
+    
+    public void Patrol()
+    {
+        if (_mover == null)
+        {
+            return;
         }
         
-        _lastPosition = transform.position;
-    }
-
-    public void Patrol(Mover mover)
-    {
         float direction = GetDirectionToWaypoint();
-        mover.Move(direction);
+        _mover.Move(direction);
+        float sqrDistance = (CurrentWaypoint.position - transform.position).sqrMagnitude;
+        float reachThresholdSqr = _reachThreshold * _reachThreshold; ;
         
         if (IsStuck())
         {
@@ -33,9 +46,9 @@ public class EnemyPatrol : MonoBehaviour
             _stuckTimer = 0f;
         }
         
-        if (HasReachedWaypoint())
+        if (sqrDistance <= reachThresholdSqr)
         {
-            SelectNextWaypoint(); 
+            SelectNextWaypoint();
         }
         
         _lastPosition = transform.position;
@@ -43,7 +56,8 @@ public class EnemyPatrol : MonoBehaviour
     
     public void SelectNextWaypoint()
     {
-        _currentWaypointIndex = (_currentWaypointIndex + 1) % _waypoints.Length;
+        _currentWaypointIndex = ++_currentWaypointIndex % _waypoints.Length;
+        _stuckTimer = 0f;
     }
     
     private float GetDirectionToWaypoint()
@@ -53,18 +67,11 @@ public class EnemyPatrol : MonoBehaviour
         return Mathf.Sign(direction.x);
     }
     
-    private bool HasReachedWaypoint()
-    {
-        float sqrDistance = (CurrentWaypoint.position - transform.position).sqrMagnitude;
-        
-        return sqrDistance <= _reachThreshold * _reachThreshold;
-    }
-    
     private bool IsStuck()
     {
         float distanceMoved = Mathf.Abs(transform.position.x - _lastPosition.x);
         
-        if (distanceMoved < 0.01f)
+        if (distanceMoved < MinMoveDistance)
         {
             _stuckTimer += Time.deltaTime;
             

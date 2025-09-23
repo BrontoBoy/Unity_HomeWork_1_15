@@ -8,21 +8,35 @@ public class Mover : MonoBehaviour
     
     private Rigidbody2D _rigidbody;
 
-    public Vector2 Velocity => _rigidbody.linearVelocity;
+    public float CurrentSpeed => Mathf.Abs(_rigidbody.linearVelocity.x);
     
-    private void Start()
+    private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
     }
     
     public void Move(float direction)
     {
-        _rigidbody.linearVelocity = new Vector2(_speedX * direction, _rigidbody.linearVelocity.y);
+        Vector2 velocity = _rigidbody.linearVelocity;
+        velocity.x = _speedX * direction;
+        _rigidbody.linearVelocity = velocity;
     }
     
     public void Jump()
     {
-        _rigidbody.linearVelocity = new Vector2(_rigidbody.linearVelocity.x, 0);
-        _rigidbody.AddForce(new Vector2(0, _jumpForce), ForceMode2D.Impulse);
+        Vector2 velocity = _rigidbody.linearVelocity;
+        velocity.y = 0f;
+        _rigidbody.linearVelocity = velocity;
+        _rigidbody.AddForce(Vector2.up * _jumpForce, ForceMode2D.Impulse);
+    }
+    
+    public float GetDistanceTo(Vector3 targetPosition)
+    {
+        return Vector3.Distance(transform.position, targetPosition);
+    }
+    
+    public float GetSqrDistanceTo(Vector3 targetPosition)
+    {
+        return (transform.position - targetPosition).sqrMagnitude;
     }
 }

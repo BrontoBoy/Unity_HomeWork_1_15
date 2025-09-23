@@ -26,22 +26,21 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         float direction = _inputReader.Direction;
-        bool isRunning = direction != 0;
 
-        if (isRunning && !_wasRunning)
+        if (direction != 0 && _wasRunning == false)
         {
             _animatorHandler.PlayRun();
             _wasRunning = true;
         }
-        else if (!isRunning && _wasRunning)
+        else if (direction == 0 && _wasRunning)
         {
             _animatorHandler.StopRun();
             _wasRunning = false;
         }
 
-        if (isRunning)
+        if (direction != 0)
         {
-            _mover.Move(_inputReader.Direction);
+            _mover.Move(direction);
             _spriteRotator.TryRotateTowards(direction); 
         }
 

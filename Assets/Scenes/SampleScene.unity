@@ -3522,7 +3522,6 @@ GameObject:
   - component: {fileID: 519420029}
   - component: {fileID: 519420030}
   - component: {fileID: 519420033}
-  - component: {fileID: 519420034}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -3660,6 +3659,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40c9ae61637a29e4cadd011e6f33310f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _coinPrefab: {fileID: -1733652620674673018, guid: 86b5b0fd6ba8afb48a1e87485d5bacbf, type: 3}
   _spawnPoints:
   - {fileID: 1046767076}
   - {fileID: 783091220}
@@ -3839,22 +3839,8 @@ MonoBehaviour:
   - {fileID: 396149186}
   - {fileID: 125691049}
   - {fileID: 1555972967}
-  _coinPool: {fileID: 519420034}
---- !u!114 &519420034
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 519420028}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1027d8673b0d65940a3bba8c1bc481f2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _coinPrefab: {fileID: -1733652620674673018, guid: 86b5b0fd6ba8afb48a1e87485d5bacbf, type: 3}
-  _defaultCapacity: 10
-  _maxSize: 100
+  _defaultPoolCapacity: 10
+  _maxPoolSize: 20
 --- !u!1001 &529450331
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15501,6 +15487,18 @@ PrefabInstance:
     - target: {fileID: 2948421156161274720, guid: f87ffc8dde69ca24196615a6af713fb4, type: 3}
       propertyPath: m_Name
       value: PlayerCharacter
+      objectReference: {fileID: 0}
+    - target: {fileID: 5046518582561284407, guid: f87ffc8dde69ca24196615a6af713fb4, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5046518582561284407, guid: f87ffc8dde69ca24196615a6af713fb4, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5046518582561284407, guid: f87ffc8dde69ca24196615a6af713fb4, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: 5046518582561284407, guid: f87ffc8dde69ca24196615a6af713fb4, type: 3}
       propertyPath: m_LocalPosition.x
